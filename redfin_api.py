@@ -5,6 +5,10 @@ import dicttoxml
 from redfin import Redfin
 from bs4 import BeautifulSoup
 
+def get_property_data(address):
+    property_id,listing_id = _get_property_ids(address)
+    return client.below_the_fold(property_id, listing_id)
+
 def _get_property_ids(address):
     url = _get_redfin_url(address)
     initial_info = client.initial_info(url)
@@ -15,10 +19,6 @@ def _get_property_ids(address):
 def _get_redfin_url(addres):
     response = client.search(address)
     return response['payload']['sections'][0]['rows'][0]['url']
-
-def get_property_data(address):
-    property_id,listing_id = _get_property_ids(address)
-    return client.below_the_fold(property_id, listing_id)
 
 def parse_data(data):
     parsed_data = {}
@@ -41,7 +41,7 @@ def main():
     global client
     client = Redfin()
     address = '4544 Radnor St, Detroit Michigan'
-    data_json = get_property_info(address)
+    data_json = get_property_data(address)
     parsed_data = parse_data(data_json)
 #'2263 Sewell Mill Rd, Marietta, GA'
 client = Redfin()
